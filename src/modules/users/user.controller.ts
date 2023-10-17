@@ -11,7 +11,7 @@ import {
 import { UserService } from './service/user.service';
 import { UserDto } from './dto/user-dto';
 import { AuthGuard } from '../auth/guard/auth.guard';
-import { ApiTags, ApiConsumes } from '@nestjs/swagger';
+import { ApiTags, ApiConsumes, ApiBearerAuth } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
@@ -21,13 +21,15 @@ import { extname } from 'path';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  // @UseGuards(AuthGuard)
-  @Get('find')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @Post('find')
   getUsersByEmail(@Body() userDto: UserDto) {
     return this.userService.findByEmail(userDto.email);
   }
 
-  // @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get('find/all')
   getUsers() {
     return this.userService.findAll();
@@ -56,7 +58,8 @@ export class UserController {
     return this.userService.create(userDto, file);
   }
 
-  // @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Post('update/:id')
   updateUser(@Param('id') id: string, @Body() user: UserDto) {
     return this.userService.update(id, user);

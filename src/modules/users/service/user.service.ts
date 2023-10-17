@@ -13,10 +13,8 @@ export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async create(userDto: UserDto, file: any) {
-    console.log(userDto);
-    console.log(file);
     const user = { ...userDto, file: `http://localhost:3000/${file.filename}` };
-    console.log(user);
+
     try {
       const userModel = new this.userModel(user);
       const createdUser = await userModel.save();
@@ -50,7 +48,6 @@ export class UserService {
   }
 
   async findByEmail(email: string): Promise<User> {
-    console.log(email);
     const user = await this.userModel.findOne({ email: email });
     if (!user) throw new NotFoundException('Could not find the user');
 

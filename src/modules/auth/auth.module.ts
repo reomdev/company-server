@@ -6,11 +6,11 @@ import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [
-    // JwtModule.register({
-    //   global: true,
-    //   secret: 'THIAGOALEJANDRO',
-    //   signOptions: { expiresIn: '3600s' },
-    // }),
+    JwtModule.register({
+      global: true,
+      secret: 'THIAGOALEJANDRO',
+      signOptions: { expiresIn: '3600s' },
+    }),
     UsersModule,
   ],
   controllers: [AuthController],

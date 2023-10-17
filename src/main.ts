@@ -12,7 +12,8 @@ async function bootstrap() {
     .setTitle('Company server')
     .setDescription('API of company server')
     .setVersion('1.0')
-    .addTag('company')
+    .addTag('Company')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

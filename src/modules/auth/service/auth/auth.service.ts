@@ -11,9 +11,7 @@ export class AuthService {
   ) {}
 
   async login(authDto: AuthDto): Promise<any> {
-    console.log(authDto);
     const user = await this.userService.findByEmail(authDto.email);
-    console.log(user);
     if (!user) throw new UnauthorizedException();
 
     const payload = { sub: user.email, username: user.name };

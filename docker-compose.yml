@@ -3,7 +3,7 @@ version: '3'
 services:
   company-server:
     container_name: company-server
-    image: company-server:1.0.0
+    image: company-server:1.0.5
     build:
       context: .
       dockerfile: Dockerfile
