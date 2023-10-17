@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  company-server:
+    container_name: company-server
+    image: company-server:1.0.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo:latest
+    container_name: 'mongo-company-server'
+    volumes:
+      - mongodb_data_container:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=company
+    ports:
+      - 27017:27017
+networks:
+  webnet:
+volumes:
+  mongodb_data_container:
