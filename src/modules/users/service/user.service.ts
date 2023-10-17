@@ -12,13 +12,14 @@ import { UserDto } from '../dto/user-dto';
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async create(userDto: UserDto) {
+  async create(userDto: UserDto, file: any) {
+    const user = { ...userDto, file: `http://localhost:3000/${file.filename}` };
+
     try {
-      const userModel = new this.userModel(userDto);
+      const userModel = new this.userModel(user);
       const createdUser = await userModel.save();
       if (!createdUser)
         return { code: 500, msg: 'A problem ocurred when the user register' };
-
       return { code: 200, msg: 'User created', createdUser };
     } catch (error) {
       throw new BadRequestException('An error ocurred', {
