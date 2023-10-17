@@ -21,14 +21,13 @@ import { extname } from 'path';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Get('find')
   getUsersByEmail(@Body() userDto: UserDto) {
-    console.log(userDto);
     return this.userService.findByEmail(userDto.email);
   }
 
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Get('find/all')
   getUsers() {
     return this.userService.findAll();
@@ -57,7 +56,7 @@ export class UserController {
     return this.userService.create(userDto, file);
   }
 
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Post('update/:id')
   updateUser(@Param('id') id: string, @Body() user: UserDto) {
     return this.userService.update(id, user);
