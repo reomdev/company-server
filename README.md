@@ -12,8 +12,8 @@ Project that represents a backend made in NestJS (Dokerized), with a connection 
 $ docker-compose up
 ```
 
-## Access to the container swagger
+## Access to the Swagger API of container
 
 ```bash
-# Swagger
+# Swagger Api
 $ http://localhost:3000/api
