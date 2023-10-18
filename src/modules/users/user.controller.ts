@@ -6,15 +6,14 @@ import {
   Post,
   UploadedFile,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './service/user.service';
-import { UserDto } from './dto/user-dto';
 import { AuthGuard } from '../auth/guard/auth.guard';
 import { ApiTags, ApiConsumes, ApiBearerAuth } from '@nestjs/swagger';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
+import { FileInterceptorDecorator } from 'src/utils/decorator/file-interceptor-decorator';
+import { UpdateUserDto } from './dto/update-user-dto';
+import { AuthDto } from '../auth/dto/auth-dto';
+import { CreateUserDto } from './dto/create-user-dto';
 
 @ApiTags('User')
 @Controller('user')
@@ -24,8 +23,8 @@ export class UserController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Post('find')
-  getUsersByEmail(@Body() userDto: UserDto) {
-    return this.userService.findByEmail(userDto.email);
+  getUsersByEmail(@Body() authDto: AuthDto) {
+    return this.userService.findByEmail(authDto.email);
   }
 
   @ApiBearerAuth()
@@ -36,32 +35,24 @@ export class UserController {
   }
 
   @ApiConsumes('multipart/form-data')
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: diskStorage({
-        destination: './public',
-        filename: (req, file, cb) => {
-          const randomName = Array(32)
-            .fill(null)
-            .map(() => Math.round(Math.random() * 16).toString(16))
-            .join('');
-          return cb(null, `${randomName}${extname(file.originalname)}`);
-        },
-      }),
-    }),
-  )
+  @FileInterceptorDecorator('file')
   @Post('create')
   createUser(
-    @Body() userDto: UserDto,
+    @Body() createUserDto: CreateUserDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.userService.create(userDto, file);
+    return this.userService.create(createUserDto, file);
   }
-
   @ApiBearerAuth()
+  @ApiConsumes('multipart/form-data')
+  @FileInterceptorDecorator('file')
   @UseGuards(AuthGuard)
   @Post('update/:id')
-  updateUser(@Param('id') id: string, @Body() user: UserDto) {
-    return this.userService.update(id, user);
+  updateUser(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.userService.update(id, updateUserDto, file);
   }
 }

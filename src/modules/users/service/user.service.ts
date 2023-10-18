@@ -6,14 +6,18 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from '../schema/user-schema';
 import { Model } from 'mongoose';
-import { UserDto } from '../dto/user-dto';
+import { UpdateUserDto } from '../dto/update-user-dto';
+import { CreateUserDto } from '../dto/create-user-dto';
 
 @Injectable()
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async create(userDto: UserDto, file: any) {
-    const user = { ...userDto, file: `http://localhost:3000/${file.filename}` };
+  async create(createUserDto: CreateUserDto, file: any) {
+    const user = {
+      ...createUserDto,
+      file: `http://localhost:3000/${file.filename}`,
+    };
 
     try {
       const userModel = new this.userModel(user);
@@ -29,10 +33,15 @@ export class UserService {
     }
   }
 
-  async update(id: string, userDto: UserDto) {
+  async update(id: string, updateUserDto: UpdateUserDto, file: any) {
+    const user = {
+      ...updateUserDto,
+      file: file?.filename ? `http://localhost:3000/${file?.filename}` : '',
+    };
+    const updateUserModel = this.deleteFieldsEmpty(user);
     try {
       const updateUser = await this.userModel
-        .findByIdAndUpdate(id, userDto, { new: true })
+        .findByIdAndUpdate(id, updateUserModel, { new: true })
         .exec();
 
       if (!updateUser) {
@@ -56,5 +65,18 @@ export class UserService {
 
   async findAll(): Promise<User[]> {
     return this.userModel.find().exec();
+  }
+
+  deleteFieldsEmpty(updateUserModel: any) {
+    for (const key in updateUserModel) {
+      if (
+        updateUserModel[key] === null ||
+        updateUserModel[key] === undefined ||
+        updateUserModel[key] === ''
+      ) {
+        delete updateUserModel[key];
+      }
+    }
+    return updateUserModel;
   }
 }
