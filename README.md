@@ -4,23 +4,16 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Project that represents a backend made in NestJS (Dokerized), with a connection to a MongoDB database (Dokerized), this backend has integrated JWT validation in some endpoints.
 
 ## Installation
 
 ```bash
-$ npm install
+$ docker-compose up
 ```
 
-## Running the app
+## Open in browser the access to swagger of container
 
 ```bash
 # development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
+$ http://localhost:3000/api
