@@ -12,7 +12,7 @@ Project that represents a backend made in NestJS (Dokerized), with a connection 
 $ docker-compose up
 ```
 
-## Open in browser the access to swagger of container
+## Access to the container swagger
 
 ```bash
 # Swagger
