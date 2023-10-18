@@ -15,5 +15,5 @@ $ docker-compose up
 ## Open in browser the access to swagger of container
 
 ```bash
-# development
+# Swagger
 $ http://localhost:3000/api
